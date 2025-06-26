@@ -7,16 +7,18 @@ hostName = "localhost" # Адрес для доступа по сети
 serverPort = 8080 # Порт для доступа по сети
 
 class MyServer(BaseHTTPRequestHandler):
+    """
+        Специальный класс, который отвечает за
+        обработку входящих запросов от клиентов
+    """
     def do_GET(self):
         """ Метод для обработки входящих GET-запросов """
-        with open("Home.html", "rb") as f:
+        self.send_response(200) # Отправка кода ответа
+        self.send_header("Content-type", 'text/html; charset=utf-8') # Отправка типа данных, который будет передаваться
+        self.end_headers() # Завершение формирования заголовков ответа
+        with open('Contact.html', 'r', encoding='utf-8') as f:
             content = f.read()
-            self.send_response(200)
-            self.send_header("Content-type", "text/html")
-            self.end_headers()
-            self.wfile.write(content)
-        self.wfile.write(bytes("{'message': 'OK'}", "utf-8")) # Тело ответа
-
+        self.wfile.write(bytes(content,'utf-8')) # Тело ответа
 
 if __name__ == "__main__":
     # Инициализация веб-сервера, который будет по заданным параметрах в сети
